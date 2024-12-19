@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thinura Dinujaya's Portfolio</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.44.1/js/jquery.terminal.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.44.1/css/jquery.terminal.min.css" rel="stylesheet" />
+
+    <!-- Custom Styling -->
+    <style>
+        :root {
+            --color: #7FFF73;
+            --background: #002316;
+            --size: 1.5;
+            --glow: 1;
+            --animation: terminal-blink;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+            background-color: var(--background);
+            color: var(--color);
+            font-size: calc(var(--size) * 1em);
+            margin: 0;
+            font-family: 'Courier New', monospace; 
+        }
+
+        .terminal {
+            background-color: var(--background) !important;
+            color: var(--color) !important;
+            flex: 1; 
+            white-space: pre-wrap; 
+            overflow-wrap: break-word; 
+            word-wrap: break-word; 
+            word-break: break-word; 
+        }
+
+        .highlight {
+            color: #FFD700; 
+            font-weight: bold; 
+        }
+
+        @media (max-width: 600px) {
+            body {
+                font-size: calc(var(--size) * 0.8em); 
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        $(document).ready(function() {
+            const startTime = new Date(); 
+    
+            const info = `
+    Name:      Thinura Dinujaya
+    About:     Backend Web Developer, Linux enthusiast
+    Skills:    PHP, MySQL, CSS, JavaScript, Python
+    Hobbies:   Null 😓
+    Contact:   [[!;;;;mailto:thinura@gmail.com]thinura27409@gmail.com]
+    
+    Social:
+    - GitHub:   [[!;;;;https://github.com/thinura660]thinura660]
+    - Instagram: [[!;;;;https://instagram.com/thinu.ix]thinu.ix]
+    
+    `;
+    
+            const commands = {
+                'whoami': info,
+                'ls': 'portfolio.html    README.md    projects    contact_info',
+                'pwd': '/home/thinura/portfolio',
+                'clear': '',
+                'cd': 'Usage: cd [directory] - changes the directory (mock command in this terminal)',
+                'mkdir': 'Usage: mkdir [directory_name] - creates a new directory (mock command)',
+                'rm': 'Usage: rm [file_name] - removes a file (mock command)',
+                'help': `Available commands:
+    - whoami: Display user info
+    - ls: List files and directories
+    - pwd: Show current directory
+    - echo: Print text to the terminal
+    - clear: Clear the terminal
+    - cd: Change directory (mock)
+    - mkdir: Make a new directory (mock)
+    - rm: Remove a file (mock)
+    - date: Show current date and time
+    - uptime: Display system uptime
+    - help: Show this help message`
+            };
+    
+            function getUptime() {
+                let now = new Date();
+                let diffMs = now - startTime; 
+                let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                let diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                let diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
+    
+                return `System uptime: ${diffDays > 0 ? diffDays + " days, " : ""}${diffHrs} hours, ${diffMins} minutes, ${diffSecs} seconds`;
+            }
+    
+            const term = $('body').terminal(function(command) {
+                let [cmd, ...args] = command.split(' ');
+                let output = commands[cmd] || 'Command not found: ' + command;
+    
+                if (cmd === 'clear') {
+                    term.clear();
+                } else if (cmd === 'echo') {
+                    output = args.join(' ');
+                    term.echo('<span class="highlight">' + command + '</span>', { raw: true });
+                    term.echo(output);
+                } else if (cmd === 'date') {
+                    output = new Date().toString();
+                    term.echo('<span class="highlight">' + command + '</span>', { raw: true });
+                    term.echo(output);
+                } else if (cmd === 'uptime') {
+                    output = getUptime();
+                    term.echo('<span class="highlight">' + command + '</span>', { raw: true });
+                    term.echo(output);
+                } else if (output) {
+                    term.echo('<span class="highlight">' + command + '</span>', { raw: true });
+                    term.echo(output, { typing: true, delay: 10 });
+                }
+            }, {
+                greetings: 'Welcome to Thinura Dinujaya\'s Personal Portfolio\n',
+                prompt: '#> ',
+                onInit: function(term) {
+                    setTimeout(() => {
+                        term.exec('whoami');
+                    }, 1000);
+                },
+                exit: false
+            });
+        });
+    </script>
+    
+    
+    
+    
+
+</body>
+</html>
